@@ -1,0 +1,15 @@
+{
+  "name": "ng-minesweeper",
+  "version": "1.0.0",
+  "description": "A minesweeper developed using angular",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Marcos Ocon (oconmarcos97@gmail.com)",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.6.4",
+    "lodash": "^4.17.4"
+  }
+}
