@@ -94,7 +94,7 @@ angular.module('ngMinesweeper')
 			var toReveal = (!cell.isMine && cell.nearMines === null) ?
 				_.filter(self.getCellsAround(cell), { opened: false, hasFlag: false }) : [];
 
-			// if cell is a mine, open all other bombs
+			// if cell is a mine, open all other mines
 			toReveal = (cell.isMine) ? _.filter(flatBoard, { opened: false, isMine: true, hasFlag: false }) : toReveal;
 
 			// cascade mecanism to open cells
