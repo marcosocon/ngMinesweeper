@@ -1,7 +1,6 @@
 angular.module('ngMinesweeper')
 	.controller('MainCtrl', function ($scope, _) {
 		var self = this;
-
 		//set initial state for the game.
 		self.state = {
 			board: [],
@@ -13,18 +12,19 @@ angular.module('ngMinesweeper')
 		};
 
 		// initialize game and return state.
-		self.init = function (rows, cols, mines) {
-			self.state.boardRows = rows || 10;
-			self.state.boardColumns = cols || 10;
-			self.state.mines = mines || 10;
+		function init(rows, cols, mines) {
+			self.state.boardRows = rows || 4;
+			self.state.boardColumns = cols || 4;
+			self.state.mines = mines || 8;
 
+			self.maxNumberOfMines = (self.state.boardColumns * self.state.boardRows) - 1;
 			self.resetGame();
 
 			return self.state;
-		};
+		}
 
 		// creates the matrix.
-		self.createBoard = function () {
+		function createBoard() {
 			self.state.board = _.times(self.state.boardRows, function (row) {
 				return _.times(self.state.boardColumns, function (col) {
 					return {
@@ -37,31 +37,31 @@ angular.module('ngMinesweeper')
 					};
 				});
 			});
-		};
+		}
 
 		// adds the mines randomly in the board.
-		self.addMines = function() {
+		function addMines() {
 			var cells = _.sampleSize(_.flatten(self.state.board), self.state.mines);
 			_.forEach(cells, function (cell) {
 				cell.isMine = true;
 			});
-		};
+		}
 
 		// set the cell nearMines number
-		self.setNearMines = function() {
-			_.forEach(self.getClosedNonMinesCells(), function (cell) {
-				var nearMines = _.filter(self.getCellsAround(cell), { isMine: true });
+		function setNearMines() {
+			_.forEach(getClosedNonMinesCells(), function (cell) {
+				var nearMines = _.filter(getCellsAround(cell), { isMine: true });
 				cell.nearMines = nearMines.length > 0 ? nearMines.length : null;
 			});
-		};
+		}
 
 		// get an array of all current closed and non mines cells.
-		self.getClosedNonMinesCells = function() {
+		function getClosedNonMinesCells() {
 			return _.filter(_.flatten(self.state.board), { isMine: false, opened: false });
-		};
+		}
 
 		// get all cells around a specific cell and itself.
-		self.getCellsAround = function(cell) {
+		function getCellsAround(cell) {
 			var cells = [];
 
 			_.forEach(_.range(-1, 2), function (i) {
@@ -75,12 +75,12 @@ angular.module('ngMinesweeper')
 			});
 
 			return cells;
-		};
+		}
 
 		// open a cell
 		self.openCell = function (row, col, evt) {
 			if(evt && evt.which && evt.which === 3) {
-				self.toggleFlag(row, col);
+				toggleFlag(row, col);
 				return false;
 			}
 
@@ -92,7 +92,7 @@ angular.module('ngMinesweeper')
 
 			// if this cell is empty, open all near cells
 			var toReveal = (!cell.isMine && cell.nearMines === null) ?
-				_.filter(self.getCellsAround(cell), { opened: false, hasFlag: false }) : [];
+				_.filter(getCellsAround(cell), { opened: false, hasFlag: false }) : [];
 
 			// if cell is a mine, open all other mines
 			toReveal = (cell.isMine) ? _.filter(flatBoard, { opened: false, isMine: true, hasFlag: false }) : toReveal;
@@ -103,12 +103,12 @@ angular.module('ngMinesweeper')
 			});
 
 			// set gameOver depending on the cell content.
-			self.state.gameOver = cell.isMine || self.getClosedNonMinesCells().length === 0;
+			self.state.gameOver = cell.isMine || getClosedNonMinesCells().length === 0;
 			return self.state.gameOver;
 		};
 
 		// toggle the hasFlag property of a cell
-		self.toggleFlag = function(row, col) {
+		function toggleFlag(row, col) {
 			if (self.state.gameOver) return;
 
 			var cell = _.find(_.flatten(self.state.board), { row: row, col: col });
@@ -117,18 +117,18 @@ angular.module('ngMinesweeper')
 
 			cell.hasFlag = !cell.hasFlag;
 			self.state.flagsLeft -= cell.hasFlag ? 1 : -1;
-		};
+		}
 
 
 		// reset game to beginning.
 		self.resetGame = function () {
-			self.createBoard();
-			self.addMines();
-			self.setNearMines();
+			createBoard();
+			addMines();
+			setNearMines();
 
 			self.state.gameOver = false;
 			self.state.flagsLeft = self.state.mines;
 		};
 
-		self.init(9, 9, 9);
+		init(6, 6, 10);
 	});

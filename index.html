@@ -24,9 +24,9 @@
 		</div>
 		<div ng-if="ctrl.state.gameOver" class="gameOver">Game Finished!</div>
 		<input type="button" ng-click="ctrl.resetGame()" value="New Game">
-		<input ng-model="ctrl.state.boardColumns" placeholder="Game Columns">
-		<input ng-model="ctrl.state.boardRows" placeholder="Game Rows">
-		<input ng-model="ctrl.state.mines" placeholder="Game Mines">
+		<input type="number" ng-model="ctrl.state.boardColumns" min="3" placeholder="Game Columns">
+		<input type="number" ng-model="ctrl.state.boardRows" min="3" placeholder="Game Rows">
+		<input type="number" ng-model="ctrl.state.mines" max="{{ctrl.maxNumberOfMines}}" placeholder="Game Mines">
 	</div>
 </body>
 <script src="./node_modules/lodash/lodash.js"></script>
