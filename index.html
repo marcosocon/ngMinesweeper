@@ -3,6 +3,7 @@
 <head>
 	<title>Minesweeper - Angular.js</title>
 	<link rel="stylesheet" type="text/css" href="./styles/styles.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body ng-controller="MainCtrl as ctrl">
@@ -11,12 +12,16 @@
 		<div class="game-board">
 			<div class="row" ng-repeat="row in ctrl.state.board">
 				<div class="cell" ng-repeat="cell in row">
-					<div ng-if="cell.revealed" class="opened">{{cell.nearMines}}</div>
-					<div ng-if="!cell.revealed" class="closed"></div>
+					<div ng-if="cell.revealed" class="opened">
+						<i ng-class="{'fa fa-bomb': cell.isMine}"></i>{{cell.nearMines}}
+					</div>
+					<div ng-if="!cell.revealed" class="closed">
+						<i ng-class="{'fa fa-flag': cell.hasFlag}"></i>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div ng-show="ctrl.state.gameOver" class="gameOver">Game Finished!</div>
+		<div ng-if="ctrl.state.gameOver" class="gameOver">Game Finished!</div>
 		<input type="button" ng-click="ctrl.resetGame()" value="New Game">
 		<input ng-model="ctrl.state.boardColumns" placeholder="Game Columns">
 		<input ng-model="ctrl.state.boardRows" placeholder="Game Rows">
