@@ -77,6 +77,33 @@ angular.module('ngMinesweeper')
 			return cells;
 		};
 
+		// reveal a cell
+		self.openCell = function (row, col, evt) {
+			var flatBoard = _.flatten(self.state.board);
+			var cell = _.find(flatBoard, { row: row, col: col });
+			cell.revealed = true;
+
+			if (self.state.gameOver){
+				return;
+			}
+
+			// if this cell is empty, open all near cells
+			var toReveal = (!cell.isBomb && cell.adjacentBombs === null) ?
+				_.filter(self.getCellsAround(cell), { opened: false, flagged: false }) : [];
+
+			// if cell is a mine, open all other bombs
+			toReveal = (cell.isBomb) ? _.filter(flatBoard, { opened: false, isMine: true, hasFlag: false }) : toReveal;
+
+			// cascade mecanism to open cells
+			_.forEach(toReveal, function (cell) {
+				self.openCell(cell.row, cell.col);
+			});
+
+			// set gameOver depending on the cell content.
+			self.state.gameOver = cell.isMine || self.getClosedNonMinesCells().length === 0;
+			return self.state.gameOver;
+		};
+
 		// reset game to beginning.
 		self.resetGame = function () {
 			self.state.gameOver = false;

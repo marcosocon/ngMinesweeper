@@ -15,7 +15,7 @@
 					<div ng-if="cell.revealed" class="opened">
 						<i ng-class="{'fa fa-bomb': cell.isMine}"></i>{{cell.nearMines}}
 					</div>
-					<div ng-if="!cell.revealed" class="closed">
+					<div ng-if="!cell.revealed" class="closed" ng-mousedown="ctrl.openCell($parent.$parent.$index, $index, $event)">
 						<i ng-class="{'fa fa-flag': cell.hasFlag}"></i>
 					</div>
 				</div>
