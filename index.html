@@ -12,11 +12,12 @@
 		<div class="game-board">
 			<div class="row" ng-repeat="row in ctrl.state.board">
 				<div class="cell" ng-repeat="cell in row">
-					<div ng-if="cell.revealed" class="opened">
-						<i ng-class="{'fa fa-bomb': cell.isMine}"></i>{{cell.nearMines}}
+					<div ng-if="cell.opened" class="opened">
+						<i ng-class="{'fa fa-bomb': cell.isMine}"></i>
+						<span>{{cell.nearMines}}</span>
 					</div>
-					<div ng-if="!cell.revealed" class="closed" ng-mousedown="ctrl.openCell($parent.$parent.$index, $index, $event)">
-						<i ng-class="{'fa fa-flag': cell.hasFlag}"></i>
+					<div ng-if="!cell.opened" class="closed" ng-mousedown="cell.hasFlag || ctrl.openCell($parent.$parent.$index, $index, $event)" oncontextmenu="return false">
+						<i ng-class="{'fa fa-flag': cell.hasFlag, 'correct': game.state.gameOver && cell.hasFlag && cell.isMine}"></i>
 					</div>
 				</div>
 			</div>

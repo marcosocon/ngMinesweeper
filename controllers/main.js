@@ -57,7 +57,7 @@ angular.module('ngMinesweeper')
 
 		// get an array of all current closed and non mines cells.
 		self.getClosedNonMinesCells = function() {
-			return _.filter(_.flatten(self.state.board), { isBomb: false, revealed: false });
+			return _.filter(_.flatten(self.state.board), { isMine: false, opened: false });
 		};
 
 		// get all cells around a specific cell and itself.
@@ -79,20 +79,23 @@ angular.module('ngMinesweeper')
 
 		// reveal a cell
 		self.openCell = function (row, col, evt) {
-			var flatBoard = _.flatten(self.state.board);
-			var cell = _.find(flatBoard, { row: row, col: col });
-			cell.revealed = true;
-
-			if (self.state.gameOver){
-				return;
+			if(evt && evt.which && evt.which === 3) {
+				self.toggleFlag(row, col);
+				return false;
 			}
 
+			if (self.state.gameOver) return;
+
+			var flatBoard = _.flatten(self.state.board);
+			var cell = _.find(flatBoard, { row: row, col: col });
+			cell.opened = true;
+
 			// if this cell is empty, open all near cells
-			var toReveal = (!cell.isBomb && cell.adjacentBombs === null) ?
-				_.filter(self.getCellsAround(cell), { opened: false, flagged: false }) : [];
+			var toReveal = (!cell.isMine && cell.nearMines === null) ?
+				_.filter(self.getCellsAround(cell), { opened: false, hasFlag: false }) : [];
 
 			// if cell is a mine, open all other bombs
-			toReveal = (cell.isBomb) ? _.filter(flatBoard, { opened: false, isMine: true, hasFlag: false }) : toReveal;
+			toReveal = (cell.isMine) ? _.filter(flatBoard, { opened: false, isMine: true, hasFlag: false }) : toReveal;
 
 			// cascade mecanism to open cells
 			_.forEach(toReveal, function (cell) {
@@ -104,12 +107,27 @@ angular.module('ngMinesweeper')
 			return self.state.gameOver;
 		};
 
+		// toggle the hasFlag property of a cell
+		self.toggleFlag = function(row, col) {
+			if (self.state.gameOver) return;
+
+			var cell = _.find(_.flatten(self.state.board), { row: row, col: col });
+
+			if (self.state.flagsLeft === 0 && !cell.hasFlag) return;
+
+			cell.hasFlag = !cell.hasFlag;
+			self.state.flagsLeft -= cell.hasFlag ? 1 : -1;
+		};
+
+
 		// reset game to beginning.
 		self.resetGame = function () {
+			self.createBoard();
+			self.addMines();
+			self.setNearMines();
+
 			self.state.gameOver = false;
 			self.state.flagsLeft = self.state.mines;
-
-			self.createBoard();
 		};
 
 		self.init(9, 9, 9);
