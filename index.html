@@ -16,8 +16,8 @@
 						<i ng-class="{'fa fa-bomb': cell.isMine}"></i>
 						<span>{{cell.nearMines}}</span>
 					</div>
-					<div ng-if="!cell.opened" class="closed" ng-mousedown="cell.hasFlag || ctrl.openCell($parent.$parent.$index, $index, $event)" oncontextmenu="return false">
-						<i ng-class="{'fa fa-flag': cell.hasFlag, 'correct': game.state.gameOver && cell.hasFlag && cell.isMine}"></i>
+					<div ng-if="!cell.opened" ng-class="{'correct': ctrl.state.gameOver && cell.hasFlag && cell.isMine}"class="closed" ng-mousedown="cell.hasFlag || ctrl.openCell($parent.$parent.$index, $index, $event)" oncontextmenu="return false">
+						<i ng-class="{'fa fa-question': cell.hasFlag}"></i>
 					</div>
 				</div>
 			</div>

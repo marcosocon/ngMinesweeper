@@ -77,7 +77,7 @@ angular.module('ngMinesweeper')
 			return cells;
 		};
 
-		// reveal a cell
+		// open a cell
 		self.openCell = function (row, col, evt) {
 			if(evt && evt.which && evt.which === 3) {
 				self.toggleFlag(row, col);
