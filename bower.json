@@ -1,0 +1,20 @@
+{
+  "name": "ng-minesweeper",
+  "description": "A minesweeper developed using angular",
+  "main": "index.js",
+  "authors": [
+    "Marcos Ocon (oconmarcos97@gmail.com)"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/marcosocon/ngMinesweeper",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-timer": "^1.3.5"
+  }
+}

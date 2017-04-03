@@ -1,6 +1,7 @@
 angular.module('ngMinesweeper')
 	.controller('MainCtrl', function ($scope, _) {
 		var self = this;
+		self.timerRunning = true;
 		//set initial state for the game.
 		self.state = {
 			board: [],
@@ -104,6 +105,9 @@ angular.module('ngMinesweeper')
 
 			// set gameOver depending on the cell content.
 			self.state.gameOver = cell.isMine || getClosedNonMinesCells().length === 0;
+			if(self.state.gameOver) {
+				stopTimer();
+			}
 			return self.state.gameOver;
 		};
 
@@ -114,11 +118,21 @@ angular.module('ngMinesweeper')
 			var cell = _.find(_.flatten(self.state.board), { row: row, col: col });
 
 			if (self.state.flagsLeft === 0 && !cell.hasFlag) return;
-
 			cell.hasFlag = !cell.hasFlag;
 			self.state.flagsLeft -= cell.hasFlag ? 1 : -1;
 		}
 
+		function startTimer() {
+			$scope.$broadcast('timer-start');
+			self.timerRunning = true;
+		}
+		function stopTimer() {
+			$scope.$broadcast('timer-stop');
+			self.timerRunning = false;
+		}
+		$scope.$on('timer-stopped', function (event, data) {
+			self.state.timeElapsed = data.minutes + ':' + data.seconds;
+		});
 
 		// reset game to beginning.
 		self.resetGame = function () {
@@ -127,6 +141,7 @@ angular.module('ngMinesweeper')
 			setNearMines();
 
 			self.state.gameOver = false;
+			startTimer();
 			self.state.flagsLeft = self.state.mines;
 		};
 

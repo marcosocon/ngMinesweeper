@@ -8,6 +8,7 @@
 
 <body ng-controller="MainCtrl as ctrl">
 	<div class="wrapper">
+		<h3><timer/></h3>
 		<div>Mine count: {{ctrl.state.flagsLeft}}</div>
 		<div class="game-board">
 			<div class="row" ng-repeat="row in ctrl.state.board">
@@ -16,7 +17,7 @@
 						<i ng-class="{'fa fa-bomb': cell.isMine}"></i>
 						<span>{{cell.nearMines}}</span>
 					</div>
-					<div ng-if="!cell.opened" ng-class="{'correct': ctrl.state.gameOver && cell.hasFlag && cell.isMine}"class="closed" ng-mousedown="cell.hasFlag || ctrl.openCell($parent.$parent.$index, $index, $event)" oncontextmenu="return false">
+					<div ng-if="!cell.opened" ng-class="{'correct': ctrl.state.gameOver && cell.hasFlag && cell.isMine}"class="closed" ng-mousedown="ctrl.openCell($parent.$parent.$index, $index, $event)" oncontextmenu="return false">
 						<i ng-class="{'fa fa-question': cell.hasFlag}"></i>
 					</div>
 				</div>
@@ -31,6 +32,9 @@
 </body>
 <script src="./node_modules/lodash/lodash.js"></script>
 <script src="./node_modules/angular/angular.js"></script>
+<script src="./bower_components/angular-timer/dist/angular-timer.min.js"></script>
+<script src="./bower_components/moment/min/moment.min.js"></script>
+<script src="./bower_components/humanize-duration/humanize-duration.js"></script>
 <script src="./app.js"></script>
 <script src="./services/lodash.js"></script>
 <script src="./controllers/main.js"></script>
