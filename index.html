@@ -23,7 +23,10 @@
 				</div>
 			</div>
 		</div>
-		<div ng-if="ctrl.state.gameOver" class="gameOver">Game Finished!</div>
+		<div ng-if="ctrl.state.gameOver" class="gameOver">
+			<span>Game Finished!</span>
+			<span>Time elapsed {{ctrl.state.timeElapsed}}</span>
+			</div>
 		<input type="button" ng-click="ctrl.resetGame()" value="New Game">
 		<input type="number" ng-model="ctrl.state.boardColumns" min="3" placeholder="Game Columns">
 		<input type="number" ng-model="ctrl.state.boardRows" min="3" placeholder="Game Rows">

@@ -122,6 +122,7 @@ angular.module('ngMinesweeper')
 			self.state.flagsLeft -= cell.hasFlag ? 1 : -1;
 		}
 
+		//timer methods
 		function startTimer() {
 			$scope.$broadcast('timer-start');
 			self.timerRunning = true;
